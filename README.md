@@ -2,7 +2,8 @@ segcvoro
 ========
 
 An experimental clone of segmented voronoi code found at Takashi Ohyama's website, http://www.nirarebakun.com/
-My intentions is to experiment with the code a bit and see if it can be re-packaged into a usable library.
+
+My intentions is to experiment with the code a bit and see if it can be re-packaged into an usable library.
 
 Original license :
 
