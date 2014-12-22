@@ -1,7 +1,5 @@
 package com.nirarebakun.segcvoro;
 
-import java.awt.Graphics;
-import java.applet.Applet;
 import java.awt.Color;
 
 public class Segcvoro extends java.applet.Applet{
@@ -60,6 +58,18 @@ public class Segcvoro extends java.applet.Applet{
     return rand1;
   }//rand
 
+  /**
+   * An implementation of getParameter that has a default value fallback
+   * @param name
+   * @param defaultValue
+   * @return the value of the parameter or defaultValue if it was not found
+   */
+  public String getParameter(String name, String defaultValue) {
+    String rv = getParameter(name);
+    if (rv == null) rv = defaultValue;
+    return rv;
+  }
+  
   public void init(){
     gcol1=Color.black;
     gcol2=Color.yellow;
@@ -68,9 +78,9 @@ public class Segcvoro extends java.applet.Applet{
     gcol5=Color.pink;
     gcol6=Color.magenta;
     gcol7=Color.cyan;
-    gtakaS=getParameter("takap");
-    ghabaS=getParameter("habap");
-    NS=getParameter("Np");
+    gtakaS=getParameter("takap", "350");
+    ghabaS=getParameter("habap", "500");
+    NS=getParameter("Np", "20");
     ghabad=dou(ghabaS);
     gtakad=dou(gtakaS);
     Nd=dou(NS);
@@ -133,18 +143,11 @@ public class Segcvoro extends java.applet.Applet{
     double dye;
     double dslope;
     double dintercept;
-    double intersectionx;
-    double minx;
-    double maxx;
-    double minx2;
-    double maxx2;
 
     int xsI[]=new int[100];
     int ysI[]=new int[100];
     int xeI[]=new int[100];
     int yeI[]=new int[100];
-    double s[]=new double[100];
-    String sss[]=new String[100];
 
     g.setColor(gcol1);
     g.fillRect(1,1,ghaba,gtaka);
@@ -158,31 +161,7 @@ public class Segcvoro extends java.applet.Applet{
       dye=rand()*(gtaka-30)+15;
       dslope=(dye-dys)/(dxe-dxs);
       dintercept=dys-dslope*dxs;
-      minx=dxs;
-      maxx=dxe;
-      if(dxs>dxe){
-        minx=dxe;
-        maxx=dxs;
-      }
-      /*            br=0;
-            for(i=0;i<k;i++){
-                minx2=gxs[i];
-                maxx2=gxe[i];
-                if(gxs[i]>gxe[i]){
-                    minx2=gxe[i];
-                    maxx2=gxs[i];
-                }
-                intersectionx=(dintercept-gintercept[i])/(gslope[i]-dslope);
-                if(intersectionx>minx && intersectionx<maxx){
-                    if(intersectionx>minx2 && intersectionx<maxx2){
-                       br=1;
-                    }
-                }
 
-            }
-
-            if(br==0){
-       */
       gxs[k]=dxs;
       gys[k]=dys;
       gxe[k]=dxe;
@@ -206,7 +185,6 @@ public class Segcvoro extends java.applet.Applet{
       gslope[k]=dslope;
       gintercept[k]=dintercept;
       k++;
-      //            }//br==0
   }//while k<n
 
     for(i=0;i<N-1;i++){
@@ -306,7 +284,7 @@ public class Segcvoro extends java.applet.Applet{
             ly=z1;
             lx=(ly-lys)/ldi;
           }
-          //                    ly=lx*ldi+lys;
+
           int cnt;
           cnt=0;
           double disie;
@@ -338,7 +316,7 @@ public class Segcvoro extends java.applet.Applet{
         //                g.drawLine((int)(selx),(int)(sely),(int)(serx),(int)(sery));
         ldi=(sely-sery)/(selx-serx);
         lys=sely-ldi*selx;
-        //                for(lx=selx;lx<serx;lx=lx+0.5){
+
         z1start=selx;
         z1end=serx;
         if(Math.abs(ldi)>1.0){
@@ -395,7 +373,7 @@ public class Segcvoro extends java.applet.Applet{
         //                g.drawLine((int)(eslx),(int)(esly),(int)(esrx),(int)(esry));
         ldi=(esly-esry)/(eslx-esrx);
         lys=esly-ldi*eslx;
-        //                for(lx=eslx;lx<esrx;lx=lx+0.5){
+
         z1start=eslx;
         z1end=esrx;
         if(Math.abs(ldi)>1.0){
@@ -462,7 +440,7 @@ public class Segcvoro extends java.applet.Applet{
         //                g.drawLine((int)(lsegcsx1),(int)(lsegcsy1),(int)(lsegcex1),(int)(lsegcey1));
         ldi=(lsegcsy1-lsegcey1)/(lsegcsx1-lsegcex1);
         lys=lsegcsy1-ldi*lsegcsx1;
-        //                for(lx=lsegcsx1;lx<lsegcex1;lx=lx+0.5){
+
         z1start=lsegcsx1;
         z1end=lsegcex1;
         if(Math.abs(ldi)>1.0){
@@ -523,7 +501,7 @@ public class Segcvoro extends java.applet.Applet{
         //                g.drawLine((int)(lsegcsx2),(int)(lsegcsy2),(int)(lsegcex2),(int)(lsegcey2));
         ldi=(lsegcsy2-lsegcey2)/(lsegcsx2-lsegcex2);
         lys=lsegcsy2-ldi*lsegcsx2;
-        //                for(lx=lsegcsx2;lx<lsegcex2;lx=lx+0.5){
+
         z1start=lsegcsx2;
         z1end=lsegcex2;
         if(Math.abs(ldi)>1.0){
@@ -592,8 +570,6 @@ public class Segcvoro extends java.applet.Applet{
         double y;
         double xrmp;
         double yrmp;
-        double xrmm;
-        double yrmm;
         double ystart;
         double yend;
 
@@ -833,11 +809,6 @@ public class Segcvoro extends java.applet.Applet{
 
     double lcx1;
     double lcy1;
-    double lcx2;
-    double lcy2;
-
-    double lslope;
-    double lintercept;
 
     double lthetai;
     double lthetaj;
