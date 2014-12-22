@@ -6,11 +6,11 @@ public class Segcvoro extends java.applet.Applet{
 
   static final long serialVersionUID = 422334534346323214L;
 
-  double gpi;
+  final double pi = Math.PI;
+  final double pi2 = Math.PI*2d;
   Color gcol1,gcol2,gcol3,gcol4,gcol5,gcol6,gcol7;
   int N,gtaka,ghaba;
   int i,j,k;
-  String NS,ghabaS,gtakaS;
   double Nd,gtakad,ghabad;
   double tmpw;
   int br;
@@ -46,11 +46,10 @@ public class Segcvoro extends java.applet.Applet{
   double gpbijep;
   double gpbijetheta;
 
-  public double dou(String dous){
-    double dou1;
-    dou1 = (Double.valueOf(dous)).doubleValue();
+  public final double toDouble(String dous){
+    double dou1 = (Double.valueOf(dous)).doubleValue();
     return dou1;
-  }//dou
+  }//toDouble
 
   public double rand(){
     double rand1;
@@ -68,7 +67,7 @@ public class Segcvoro extends java.applet.Applet{
     String rv = getParameter(name);
     if (rv == null) rv = defaultValue;
     return rv;
-  }
+  }//getParameter
   
   public void init(){
     gcol1=Color.black;
@@ -78,12 +77,10 @@ public class Segcvoro extends java.applet.Applet{
     gcol5=Color.pink;
     gcol6=Color.magenta;
     gcol7=Color.cyan;
-    gtakaS=getParameter("takap", "350");
-    ghabaS=getParameter("habap", "500");
-    NS=getParameter("Np", "20");
-    ghabad=dou(ghabaS);
-    gtakad=dou(gtakaS);
-    Nd=dou(NS);
+
+    ghabad=toDouble(getParameter("habap", "500"));
+    gtakad=toDouble(getParameter("takap", "350"));
+    Nd=toDouble(getParameter("Np", "20"));
     ghaba=(int)ghabad;
     gtaka=(int)gtakad;
     N=(int)Nd;
@@ -92,20 +89,19 @@ public class Segcvoro extends java.applet.Applet{
     }
   }//init
 
-  public double jou(double a,double b){
+  public double pow(double a,double b){
     double jou1;
     jou1=Math.pow(a,b);
     return jou1;
   }//jou
 
   public double dis(double x1,double y1,double x2,double y2){
-    return jou(jou(x2-x1,2.0)+jou(y2-y1,2.0),0.5);
+    return pow(pow(x2-x1,2.0)+pow(y2-y1,2.0),0.5);
   }//dis
 
   //main function
   //main関数
   public void paint(java.awt.Graphics g){
-    gpi=3.14159265358979323846263;//pi
 
     //s is start
     //e is end
@@ -488,7 +484,7 @@ public class Segcvoro extends java.applet.Applet{
           }
           if(cnt==0){
             double disijc;
-            disijc=Math.abs(gslope[i]*lx-ly+gintercept[i])/jou(jou(gslope[i],2.0)+1.0,0.5);
+            disijc=Math.abs(gslope[i]*lx-ly+gintercept[i])/pow(pow(gslope[i],2.0)+1.0,0.5);
             if(cntorder(i,j,lx,ly,disijc)==0){
               g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
             }
@@ -549,7 +545,7 @@ public class Segcvoro extends java.applet.Applet{
           }
           if(cnt==0){
             double disijc;
-            disijc=Math.abs(gslope[i]*lx-ly+gintercept[i])/jou(jou(gslope[i],2.0)+1.0,0.5);
+            disijc=Math.abs(gslope[i]*lx-ly+gintercept[i])/pow(pow(gslope[i],2.0)+1.0,0.5);
             if(cntorder(i,j,lx,ly,disijc)==0){
               g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
             }
@@ -582,9 +578,9 @@ public class Segcvoro extends java.applet.Applet{
         //parabola bisector of line segment i and left point of segment j
         bisecsegpois(i,j);
         lpbijsp=gpbijsp;
-        lpbijstheta=gpi-gpbijstheta;
+        lpbijstheta=pi-gpbijstheta;
         if(gxs[j]>gpboriginx){
-          lpbijstheta=gpi*2.0-gpbijstheta;
+          lpbijstheta=pi2-gpbijstheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
@@ -602,7 +598,7 @@ public class Segcvoro extends java.applet.Applet{
         lpboriginy=gpboriginy;
         g.setColor(Color.green);
         for(y=ystart;y<yend;y=y+0.1){
-          x=jou(y,2.0)/(4.0*lpbijsp);
+          x=pow(y,2.0)/(4.0*lpbijsp);
           xrmp=lpboriginx+Math.cos(-lpbijstheta)*x-Math.sin(-lpbijstheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbijstheta)*x+Math.cos(-lpbijstheta)*y;
           cnt=0;
@@ -631,9 +627,9 @@ public class Segcvoro extends java.applet.Applet{
         //parabola bisector of line segment i and right point of segment j
         bisecsegpoie(i,j);
         lpbijep=gpbijep;
-        lpbijetheta=gpi-gpbijetheta;
+        lpbijetheta=pi-gpbijetheta;
         if(gxe[j]>gpboriginx){
-          lpbijetheta=gpi*2.0-gpbijetheta;
+          lpbijetheta=pi2-gpbijetheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
@@ -649,7 +645,7 @@ public class Segcvoro extends java.applet.Applet{
         lpboriginy=gpboriginy;
         g.setColor(Color.pink);
         for(y=ystart;y<yend;y=y+0.1){
-          x=jou(y,2.0)/(4.0*lpbijep);
+          x=pow(y,2.0)/(4.0*lpbijep);
           xrmp=lpboriginx+Math.cos(-lpbijetheta)*x-Math.sin(-lpbijetheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbijetheta)*x+Math.cos(-lpbijetheta)*y;
           cnt=0;
@@ -676,9 +672,9 @@ public class Segcvoro extends java.applet.Applet{
         //parabola bisector of line segment j and left point of segment i
         bisecsegpois(j,i);
         lpbjisp=gpbijsp;
-        lpbjistheta=gpi-gpbijstheta;
+        lpbjistheta=pi-gpbijstheta;
         if(gxs[i]>gpboriginx){
-          lpbjistheta=gpi*2.0-gpbijstheta;
+          lpbjistheta=pi2-gpbijstheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
@@ -696,7 +692,7 @@ public class Segcvoro extends java.applet.Applet{
         lpboriginy=gpboriginy;
         g.setColor(Color.cyan);
         for(y=ystart;y<yend;y=y+0.1){
-          x=jou(y,2.0)/(4.0*lpbjisp);
+          x=pow(y,2.0)/(4.0*lpbjisp);
           xrmp=lpboriginx+Math.cos(-lpbjistheta)*x-Math.sin(-lpbjistheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbjistheta)*x+Math.cos(-lpbjistheta)*y;
           cnt=0;
@@ -723,9 +719,9 @@ public class Segcvoro extends java.applet.Applet{
         //parabola bisector of line segment j and right point of segment i
         bisecsegpoie(j,i);
         lpbjiep=gpbijep;
-        lpbjietheta=gpi-gpbijetheta;
+        lpbjietheta=pi-gpbijetheta;
         if(gxe[i]>gpboriginx){
-          lpbjietheta=gpi*2.0-gpbijetheta;
+          lpbjietheta=pi2-gpbijetheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
@@ -741,7 +737,7 @@ public class Segcvoro extends java.applet.Applet{
         lpboriginy=gpboriginy;
         g.setColor(Color.red);
         for(y=ystart;y<yend;y=y+0.1){
-          x=jou(y,2.0)/(4.0*lpbjiep);
+          x=pow(y,2.0)/(4.0*lpbjiep);
           xrmp=lpboriginx+Math.cos(-lpbjietheta)*x-Math.sin(-lpbjietheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbjietheta)*x+Math.cos(-lpbjietheta)*y;
           cnt=0;
@@ -852,9 +848,9 @@ public class Segcvoro extends java.applet.Applet{
 
     lthetaj=Math.atan(gslope[parj]);
     if(lthetai<lthetaj){
-      lthetai=lthetai+gpi;
+      lthetai=lthetai+pi;
     }else{
-      lthetaj=lthetaj+gpi;
+      lthetaj=lthetaj+pi;
     }
     lctheta=(lthetai+lthetaj)/2.0;
     lcslope=Math.tan(lctheta);
@@ -896,7 +892,7 @@ public class Segcvoro extends java.applet.Applet{
     double lcy;
 
     //distance between line i and point(left point of j)
-    dis=Math.abs(gslope[pari]*gxs[parj]-gys[parj]+gintercept[pari])/jou(jou(gslope[pari],2.0)+1.0,0.5);
+    dis=Math.abs(gslope[pari]*gxs[parj]-gys[parj]+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
     lp=dis/2.0;
     lslopej=-1.0/gslope[pari];
     linterceptj=gys[parj]-lslopej*gxs[parj];
@@ -926,7 +922,7 @@ public class Segcvoro extends java.applet.Applet{
     double lcy;
 
     //distance between line i and point(right point of j)
-    dis=Math.abs(gslope[pari]*gxe[parj]-gye[parj]+gintercept[pari])/jou(jou(gslope[pari],2.0)+1.0,0.5);
+    dis=Math.abs(gslope[pari]*gxe[parj]-gye[parj]+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
     lp=dis/2.0;
     lslopej=-1.0/gslope[pari];
     linterceptj=gye[parj]-lslopej*gxe[parj];
@@ -950,7 +946,7 @@ public class Segcvoro extends java.applet.Applet{
     for(l=0;l<N;l++){
       if(l!=si && l!=sj){
         double disl;
-        disl=Math.abs(gslope[l]*sx-sy+gintercept[l])/jou(jou(gslope[l],2.0)+1.0,0.5);
+        disl=Math.abs(gslope[l]*sx-sy+gintercept[l])/pow(pow(gslope[l],2.0)+1.0,0.5);
         if(disl<sd){
           double dil;
           double ysl;
