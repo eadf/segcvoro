@@ -1,3 +1,5 @@
+package com.nirarebakun.segcvoro
+
 import java.awt.Graphics;
 import java.applet.Applet;
 import java.awt.Color;
@@ -87,7 +89,7 @@ public class segcvoro extends java.applet.Applet{
     }//dis
 
     //main function
-    //mainä÷êî
+    //mainÈñ¢Êï∞
     public void paint(java.awt.Graphics g){
         gpi=3.14159265358979323846263;//pi
 
