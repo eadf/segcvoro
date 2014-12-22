@@ -9,9 +9,9 @@ public class Segcvoro extends java.applet.Applet{
   final double pi = Math.PI;
   final double pi2 = Math.PI*2d;
   Color gcol1,gcol2,gcol3,gcol4,gcol5,gcol6,gcol7;
-  int N,gtaka,ghaba;
+  int N,heightI,widthI;
   int i,j,k;
-  double Nd,gtakad,ghabad;
+  double Nd,heightD,widthD;
   double tmpw;
   int br;
 
@@ -47,8 +47,7 @@ public class Segcvoro extends java.applet.Applet{
   double gpbijetheta;
 
   public final double toDouble(String dous){
-    double dou1 = (Double.valueOf(dous)).doubleValue();
-    return dou1;
+    return (Double.valueOf(dous)).doubleValue();
   }//toDouble
 
   public double rand(){
@@ -78,24 +77,22 @@ public class Segcvoro extends java.applet.Applet{
     gcol6=Color.magenta;
     gcol7=Color.cyan;
 
-    ghabad=toDouble(getParameter("habap", "500"));
-    gtakad=toDouble(getParameter("takap", "350"));
+    widthD=toDouble(getParameter("habap", "500"));
+    heightD=toDouble(getParameter("takap", "350"));
     Nd=toDouble(getParameter("Np", "20"));
-    ghaba=(int)ghabad;
-    gtaka=(int)gtakad;
+    widthI=(int)widthD;
+    heightI=(int)heightD;
     N=(int)Nd;
     if(N==20){
       N=2+(int)(14*rand());
     }
   }//init
 
-  public double pow(double a,double b){
-    double jou1;
-    jou1=Math.pow(a,b);
-    return jou1;
-  }//jou
+  public final double pow(double a,double b){
+    return Math.pow(a,b);
+  }//pow
 
-  public double dis(double x1,double y1,double x2,double y2){
+  public final double dis(double x1,double y1,double x2,double y2){
     return pow(pow(x2-x1,2.0)+pow(y2-y1,2.0),0.5);
   }//dis
 
@@ -146,15 +143,15 @@ public class Segcvoro extends java.applet.Applet{
     int yeI[]=new int[100];
 
     g.setColor(gcol1);
-    g.fillRect(1,1,ghaba,gtaka);
+    g.fillRect(1,1,widthI,heightI);
     g.setColor(gcol3);
     g.drawString("N="+N,15,15);
     k=0;
     while(k<N){
-      dxs=rand()*(ghaba-30)+15;
-      dys=rand()*(gtaka-30)+15;
-      dxe=rand()*(ghaba-30)+15;
-      dye=rand()*(gtaka-30)+15;
+      dxs=rand()*(widthI-30)+15;
+      dys=rand()*(heightI-30)+15;
+      dxe=rand()*(widthI-30)+15;
+      dye=rand()*(heightI-30)+15;
       dslope=(dye-dys)/(dxe-dxs);
       dintercept=dys-dslope*dxs;
 
@@ -181,7 +178,7 @@ public class Segcvoro extends java.applet.Applet{
       gslope[k]=dslope;
       gintercept[k]=dintercept;
       k++;
-  }//while k<n
+    }//while k<n
 
     for(i=0;i<N-1;i++){
       for(j=i+1;j<N;j++){
@@ -764,7 +761,7 @@ public class Segcvoro extends java.applet.Applet{
   }//paint main
 
   //bisectors of two points
-  void bisec2poi( double tx1, double ty1, double tx2,  double ty2){
+  void bisec2poi( double tx1, double ty1, double tx2, double ty2){
     double ssdi;
     double ssdi2;
     double ssys;
@@ -783,19 +780,19 @@ public class Segcvoro extends java.applet.Applet{
       grx1=-ssys/ssdi2;
       gry1=0.0;
     }
-    if(ssys>gtakad){
-      grx1=(gtakad-ssys)/ssdi2;
-      gry1=gtakad;
+    if(ssys>heightD){
+      grx1=(heightD-ssys)/ssdi2;
+      gry1=heightD;
     }
-    grx2=ghabad;
-    gry2=ssdi2*ghabad+ssys;
+    grx2=widthD;
+    gry2=ssdi2*widthD+ssys;
     if(gry2<0.0){
       grx2=-ssys/ssdi2;
       gry2=0.0;
     }
-    if(ssdi2*ghabad+ssys>gtakad){
-      grx2=(gtakad-ssys)/ssdi2;
-      gry2=gtakad;
+    if(ssdi2*widthD+ssys>heightD){
+      grx2=(heightD-ssys)/ssdi2;
+      gry2=heightD;
     }
   }//bisec2poi
 
@@ -831,19 +828,19 @@ public class Segcvoro extends java.applet.Applet{
       gux1=-lcys/lcslope;
       guy1=0.0;
     }
-    if(lcys>gtakad){
-      gux1=(gtakad-lcys)/lcslope;
-      guy1=gtakad;
+    if(lcys>heightD){
+      gux1=(heightD-lcys)/lcslope;
+      guy1=heightD;
     }
-    gux2=ghabad;
-    guy2=lcslope*ghabad+lcys;
+    gux2=widthD;
+    guy2=lcslope*widthD+lcys;
     if(guy2<0.0){
       gux2=-lcys/lcslope;
       guy2=0.0;
     }
-    if(lcslope*ghabad+lcys>gtakad){
-      gux2=(gtakad-lcys)/lcslope;
-      guy2=gtakad;
+    if(lcslope*widthD+lcys>heightD){
+      gux2=(heightD-lcys)/lcslope;
+      guy2=heightD;
     }
 
     lthetaj=Math.atan(gslope[parj]);
@@ -862,19 +859,19 @@ public class Segcvoro extends java.applet.Applet{
       gux3=-lcys/lcslope;
       guy3=0.0;
     }
-    if(lcys>gtakad){
-      gux3=(gtakad-lcys)/lcslope;
-      guy3=gtakad;
+    if(lcys>heightD){
+      gux3=(heightD-lcys)/lcslope;
+      guy3=heightD;
     }
-    gux4=ghabad;
-    guy4=lcslope*ghabad+lcys;
+    gux4=widthD;
+    guy4=lcslope*widthD+lcys;
     if(guy4<0.0){
       gux4=-lcys/lcslope;
       guy4=0.0;
     }
-    if(lcslope*ghabad+lcys>gtakad){
-      gux4=(gtakad-lcys)/lcslope;
-      guy4=gtakad;
+    if(lcslope*widthD+lcys>heightD){
+      gux4=(heightD-lcys)/lcslope;
+      guy4=heightD;
     }
 
   }//bisec2poi
@@ -911,26 +908,17 @@ public class Segcvoro extends java.applet.Applet{
 
   //parabola bisector of line segment i and right point of segment j
   void bisecsegpoie(int pari, int parj){
-    double lthetaj;
-    double dis;
-    double lslopej;
-    double linterceptj;
-    double lp;
-    double lintersectionx;
-    double lintersectiony;
-    double lcx;
-    double lcy;
 
     //distance between line i and point(right point of j)
-    dis=Math.abs(gslope[pari]*gxe[parj]-gye[parj]+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
-    lp=dis/2.0;
-    lslopej=-1.0/gslope[pari];
-    linterceptj=gye[parj]-lslopej*gxe[parj];
-    lintersectionx=(gintercept[pari]-linterceptj)/(lslopej-gslope[pari]);
-    lintersectiony=lintersectionx*lslopej+linterceptj;
-    lcx=(gxe[parj]+lintersectionx)/2.0;
-    lcy=(gye[parj]+lintersectiony)/2.0;
-    lthetaj=Math.atan(lslopej);
+    double dis=Math.abs(gslope[pari]*gxe[parj]-gye[parj]+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
+    double lp=dis/2.0;
+    double lslopej=-1.0/gslope[pari];
+    double linterceptj=gye[parj]-lslopej*gxe[parj];
+    double lintersectionx=(gintercept[pari]-linterceptj)/(lslopej-gslope[pari]);
+    double lintersectiony=lintersectionx*lslopej+linterceptj;
+    double lcx=(gxe[parj]+lintersectionx)/2.0;
+    double lcy=(gye[parj]+lintersectiony)/2.0;
+    double lthetaj=Math.atan(lslopej);
 
     gpboriginx=lcx;
     gpboriginy=lcy;
@@ -955,8 +943,7 @@ public class Segcvoro extends java.applet.Applet{
           ysl=sy-dil*sx;
           intersectionxl=(ysl-gintercept[l])/(gslope[l]-dil);
           if(intersectionxl<gxs[l] || intersectionxl>gxe[l]){
-            double disls;
-            disls=dis(sx,sy,gxs[l],gys[l]);
+            double disls=dis(sx,sy,gxs[l],gys[l]);
             if(disls<sd){
               lcnt++;
             }else{
