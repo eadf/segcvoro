@@ -2,7 +2,20 @@ package com.nirarebakun.segcvoro;
 
 import java.awt.Color;
 
-public class Segcvoro extends java.applet.Applet{
+/**
+ * Use of Takashi OHYAMA's website (Open 2012/9/16, 0th revision Sunday, 16-Sep-2012 14:57:22 JST)
+ * Please consider as follows;
+ *
+ * If you use program codes or other materials of Takashi OHYAMA's website, please write my name or website address in the References as follows;
+ * Takashi Ohyama's website, http://www.nirarebakun.com/
+ * or
+ * Takashi OHYAMA's website of ***, http://www.nirarebakun.com/***.html
+ *
+ * These program codes and materials are free, but I am happy if you might pay donation.
+ * 
+ * @author Takashi Ohyama
+ */
+public class Segcvoro extends java.applet.Applet {
 
   static final long serialVersionUID = 422334534346323214L;
 
