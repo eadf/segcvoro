@@ -1,6 +1,5 @@
 package com.nirarebakun.segcvoro;
-
-import java.awt.Color;
+import java.awt.geom.Point2D;
 
 /**
  * Use of Takashi OHYAMA's website (Open 2012/9/16, 0th revision Sunday, 16-Sep-2012 14:57:22 JST)
@@ -15,23 +14,18 @@ import java.awt.Color;
  * 
  * @author Takashi Ohyama
  */
-public class Segcvoro extends java.applet.Applet {
-
+public class Segcvoro {
+  
   static final long serialVersionUID = 422334534346323214L;
 
-  final double pi = Math.PI;
-  final double pi2 = Math.PI*2d;
-  Color gcol1,gcol2,gcol3,gcol4,gcol5,gcol6,gcol7;
+  final static double pi = Math.PI;
+  final static double pi2 = Math.PI*2d;
+  
   int N,heightI,widthI;
-  int i,j,k;
   double Nd,heightD,widthD;
-  double tmpw;
-  int br;
 
-  double gxs[]=new double[100];
-  double gys[]=new double[100];
-  double gxe[]=new double[100];
-  double gye[]=new double[100];
+  Point2D.Double gs[]=null;
+  Point2D.Double ge[]=null;
 
   double gslope[]=new double[100];
   double gintercept[]=new double[100];
@@ -59,47 +53,46 @@ public class Segcvoro extends java.applet.Applet {
   double gpbijep;
   double gpbijetheta;
 
+  Segcvoro(double width, double height, int n, Point2D.Double gStart[], Point2D.Double gEnd[]) {
+    N=n;
+    
+    assert(gStart.length == gEnd.length);
+    assert(gStart.length <= n);
+    
+    gs = gStart;
+    ge = gEnd;
+    widthD=width;
+    heightD=height;
+    
+    widthI=(int) widthD;
+    heightI=(int) heightD;
+    
+    if(N==20){
+      N=2+(int) (14*Math.random());
+    }
+    
+    double dslope;
+    double dintercept;
+    Point2D.Double tmpw;
+    
+    for(int k=0; k<N; k++){
+      dslope=(ge[k].y-gs[k].y)/(ge[k].x-gs[k].x);
+      dintercept=gs[k].y-dslope*gs[k].x;
+
+      if(gs[k].x>ge[k].x){
+        tmpw=gs[k];
+        gs[k]=ge[k];
+        ge[k]=tmpw;
+      }
+      gslope[k]=dslope;
+      gintercept[k]=dintercept;
+     
+    }//for k<n
+  }
+  
   public final double toDouble(String dous){
     return (Double.valueOf(dous)).doubleValue();
   }//toDouble
-
-  public double rand(){
-    double rand1;
-    rand1=Math.random();
-    return rand1;
-  }//rand
-
-  /**
-   * An implementation of getParameter that has a default value fallback
-   * @param name
-   * @param defaultValue
-   * @return the value of the parameter or defaultValue if it was not found
-   */
-  public String getParameter(String name, String defaultValue) {
-    String rv = getParameter(name);
-    if (rv == null) rv = defaultValue;
-    return rv;
-  }//getParameter
-  
-  public void init(){
-    gcol1=Color.black;
-    gcol2=Color.yellow;
-    gcol3=Color.white;
-    gcol4=Color.green;
-    gcol5=Color.pink;
-    gcol6=Color.magenta;
-    gcol7=Color.cyan;
-
-    widthD=toDouble(getParameter("habap", "500"));
-    heightD=toDouble(getParameter("takap", "350"));
-    Nd=toDouble(getParameter("Np", "20"));
-    widthI=(int)widthD;
-    heightI=(int)heightD;
-    N=(int)Nd;
-    if(N==20){
-      N=2+(int)(14*rand());
-    }
-  }//init
 
   public final double pow(double a,double b){
     return Math.pow(a,b);
@@ -109,9 +102,7 @@ public class Segcvoro extends java.applet.Applet {
     return pow(pow(x2-x1,2.0)+pow(y2-y1,2.0),0.5);
   }//dis
 
-  //main function
-  //main関数
-  public void paint(java.awt.Graphics g){
+  public void paint(TurtleLogger turtle){
 
     //s is start
     //e is end
@@ -140,69 +131,30 @@ public class Segcvoro extends java.applet.Applet {
     double esrx;
     double esry;
 
-
-
-
-    double dxs;
-    double dxe;
-    double dys;
-    double dye;
-    double dslope;
-    double dintercept;
-
-    int xsI[]=new int[100];
-    int ysI[]=new int[100];
-    int xeI[]=new int[100];
-    int yeI[]=new int[100];
-
-    g.setColor(gcol1);
-    g.fillRect(1,1,widthI,heightI);
-    g.setColor(gcol3);
-    g.drawString("N="+N,15,15);
-    k=0;
-    while(k<N){
-      dxs=rand()*(widthI-30)+15;
-      dys=rand()*(heightI-30)+15;
-      dxe=rand()*(widthI-30)+15;
-      dye=rand()*(heightI-30)+15;
-      dslope=(dye-dys)/(dxe-dxs);
-      dintercept=dys-dslope*dxs;
-
-      gxs[k]=dxs;
-      gys[k]=dys;
-      gxe[k]=dxe;
-      gye[k]=dye;
-      if(gxs[k]>gxe[k]){
-        tmpw=gxs[k];
-        gxs[k]=gxe[k];
-        gxe[k]=tmpw;
-        tmpw=gys[k];
-        gys[k]=gye[k];
-        gye[k]=tmpw;
-      }
-      xsI[k]=(int)(gxs[k]);
-      ysI[k]=(int)(gys[k]);
-      xeI[k]=(int)(gxe[k]);
-      yeI[k]=(int)(gye[k]);
-      g.setColor(gcol3);
-      g.drawLine(xsI[k],ysI[k],xeI[k],yeI[k]);
-      g.setColor(gcol2);
-      g.drawString(""+k,(xsI[k]+xeI[k])/2,(ysI[k]+yeI[k])/2);
-      gslope[k]=dslope;
-      gintercept[k]=dintercept;
-      k++;
-    }//while k<n
-
-    for(i=0;i<N-1;i++){
-      for(j=i+1;j<N;j++){
-
+    turtle.setColor(1);
+    turtle.fillRect(1,1,widthI,heightI);
+    turtle.setColor(3);
+    turtle.drawString("N="+N,15,15);
+    
+    for(int k=0; k<N; k++){
+      turtle.setColor( 3);
+      turtle.drawLine((int)gs[k].x,(int)gs[k].y,(int)ge[k].x,(int)ge[k].y);
+      turtle.setColor( 2);
+      turtle.drawString(""+k,(int)(gs[k].x+ge[k].x)/2,(int)(gs[k].y+ge[k].y)/2);
+    }//for k<n
+    
+    for(int i=0;i<N-1;i++){
+      for(int j=i+1;j<N;j++){
+        
+        turtle.begin(i, j, 0);
+        
         //bisector of i's left vertex and j's left vertex
-        bisec2poi(gxs[i],gys[i],gxs[j],gys[j]);
+        bisec2poi(gs[i].x,gs[i].y,gs[j].x,gs[j].y);
         slx=grx1;
         sly=gry1;
         srx=grx2;
         sry=gry2;
-        g.setColor(Color.yellow);
+        turtle.setColor(2);
         //                g.drawLine((int)(slx),(int)(sly),(int)(srx),(int)(sry));
         double ldi;
         double lys;
@@ -239,9 +191,9 @@ public class Segcvoro extends java.applet.Applet {
           double disis;
           double disiseps;
           double disjseps;
-          disis=dis(lx,ly,gxs[i],gys[i]);
-          disiseps=dis(lx,ly,gxs[i]*0.999+gxe[i]*0.001,gys[i]*0.999+gye[i]*0.001);
-          disjseps=dis(lx,ly,gxs[j]*0.999+gxe[j]*0.001,gys[j]*0.999+gye[j]*0.001);
+          disis=dis(lx,ly,gs[i].x,gs[i].y);
+          disiseps=dis(lx,ly,gs[i].x*0.999+ge[i].x*0.001,gs[i].y*0.999+ge[i].y*0.001);
+          disjseps=dis(lx,ly,gs[j].x*0.999+ge[j].x*0.001,gs[j].y*0.999+ge[j].y*0.001);
           if(disiseps<disis){
             cnt++;
           }
@@ -250,18 +202,20 @@ public class Segcvoro extends java.applet.Applet {
           }
           if(cnt==0){
             if(cntorder(i,j,lx,ly,disis)==0){
-              g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
+              turtle.plot((int)(lx),(int)(ly));
             }
           }
         }//lx
 
         //bisector of i's right vertex and j's right vertex
-        bisec2poi(gxe[i],gye[i],gxe[j],gye[j]);
+        turtle.begin(i, j, 1);
+        
+        bisec2poi(ge[i].x,ge[i].y,ge[j].x,ge[j].y);
         elx=grx1;
         ely=gry1;
         erx=grx2;
         ery=gry2;
-        g.setColor(Color.cyan);
+        turtle.setColor(7);
         //                g.drawLine((int)(elx),(int)(ely),(int)(erx),(int)(ery));
         ldi=(ely-ery)/(elx-erx);
         lys=ely-ldi*elx;
@@ -296,9 +250,9 @@ public class Segcvoro extends java.applet.Applet {
           double disie;
           double disieeps;
           double disjeeps;
-          disie=dis(lx,ly,gxe[i],gye[i]);
-          disieeps=dis(lx,ly,gxe[i]*0.999+gxs[i]*0.001,gye[i]*0.999+gys[i]*0.001);
-          disjeeps=dis(lx,ly,gxe[j]*0.999+gxs[j]*0.001,gye[j]*0.999+gys[j]*0.001);
+          disie=dis(lx,ly,ge[i].x,ge[i].y);
+          disieeps=dis(lx,ly,ge[i].x*0.999+gs[i].x*0.001,ge[i].y*0.999+gs[i].y*0.001);
+          disjeeps=dis(lx,ly,ge[j].x*0.999+gs[j].x*0.001,ge[j].y*0.999+gs[j].y*0.001);
           if(disieeps<disie){
             cnt++;
           }
@@ -307,18 +261,19 @@ public class Segcvoro extends java.applet.Applet {
           }
           if(cnt==0){
             if(cntorder(i,j,lx,ly,disie)==0){
-              g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
+              turtle.plot((int)(lx),(int)(ly));
             }
           }
         }//lx
 
         //bisector of i's left vertex and j's right vertex
-        bisec2poi(gxs[i],gys[i],gxe[j],gye[j]);
+        turtle.begin(i, j, 3);
+        bisec2poi(gs[i].x,gs[i].y,ge[j].x,ge[j].y);
         selx=grx1;
         sely=gry1;
         serx=grx2;
         sery=gry2;
-        g.setColor(Color.yellow);
+        turtle.setColor(2);
         //                g.drawLine((int)(selx),(int)(sely),(int)(serx),(int)(sery));
         ldi=(sely-sery)/(selx-serx);
         lys=sely-ldi*selx;
@@ -348,14 +303,13 @@ public class Segcvoro extends java.applet.Applet {
             lx=(ly-lys)/ldi;
           }
           //                    ly=lx*ldi+lys;
-          int cnt;
-          cnt=0;
+          int cnt = 0;
           double disis;
           double disiseps;
           double disjeeps;
-          disis=dis(lx,ly,gxs[i],gys[i]);
-          disiseps=dis(lx,ly,gxs[i]*0.999+gxe[i]*0.001,gys[i]*0.999+gye[i]*0.001);
-          disjeeps=dis(lx,ly,gxe[j]*0.999+gxs[j]*0.001,gye[j]*0.999+gys[j]*0.001);
+          disis=dis(lx,ly,gs[i].x,gs[i].y);
+          disiseps=dis(lx,ly,gs[i].x*0.999+ge[i].x*0.001,gs[i].y*0.999+ge[i].y*0.001);
+          disjeeps=dis(lx,ly,ge[j].x*0.999+gs[j].x*0.001,ge[j].y*0.999+gs[j].y*0.001);
           if(disiseps<disis){
             cnt++;
           }
@@ -364,18 +318,19 @@ public class Segcvoro extends java.applet.Applet {
           }
           if(cnt==0){
             if(cntorder(i,j,lx,ly,disis)==0){
-              g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
+              turtle.plot((int)(lx),(int)(ly));
             }
           }
         }//lx
 
         //bisector of i's right vertex and j's right vertex
-        bisec2poi(gxe[i],gye[i],gxs[j],gys[j]);
+        turtle.begin(i, j, 4);
+        bisec2poi(ge[i].x,ge[i].y,gs[j].x,gs[j].y);
         eslx=grx1;
         esly=gry1;
         esrx=grx2;
         esry=gry2;
-        g.setColor(Color.magenta);
+        turtle.setColor(6);
         //                g.drawLine((int)(eslx),(int)(esly),(int)(esrx),(int)(esry));
         ldi=(esly-esry)/(eslx-esrx);
         lys=esly-ldi*eslx;
@@ -410,9 +365,9 @@ public class Segcvoro extends java.applet.Applet {
           double disie;
           double disieeps;
           double disjseps;
-          disie=dis(lx,ly,gxe[i],gye[i]);
-          disieeps=dis(lx,ly,gxe[i]*0.999+gxs[i]*0.001,gye[i]*0.999+gys[i]*0.001);
-          disjseps=dis(lx,ly,gxs[j]*0.999+gxe[j]*0.001,gys[j]*0.999+gye[j]*0.001);
+          disie=dis(lx,ly,ge[i].x,ge[i].y);
+          disieeps=dis(lx,ly,ge[i].x*0.999+gs[i].x*0.001,ge[i].y*0.999+gs[i].y*0.001);
+          disjseps=dis(lx,ly,gs[j].x*0.999+ge[j].x*0.001,gs[j].y*0.999+ge[j].y*0.001);
           if(disieeps<disie){
             cnt++;
           }
@@ -421,13 +376,14 @@ public class Segcvoro extends java.applet.Applet {
           }
           if(cnt==0){
             if(cntorder(i,j,lx,ly,disie)==0){
-              g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
+              turtle.plot((int)(lx),(int)(ly));
             }
           }
         }//lx
 
 
         //bisector of two line segments
+        turtle.begin(i, j, 5);
         bisec2seg(i,j);
         double lsegcsx1;
         double lsegcsy1;
@@ -441,7 +397,7 @@ public class Segcvoro extends java.applet.Applet {
         lsegcsy1=guy1;
         lsegcex1=gux2;
         lsegcey1=guy2;
-        g.setColor(Color.green);
+        turtle.setColor(4);
         //                g.drawOval((int)(gx)-3,(int)(gy)-3,6,6);
         //                g.drawLine((int)(lsegcsx1),(int)(lsegcsy1),(int)(lsegcex1),(int)(lsegcey1));
         ldi=(lsegcsy1-lsegcey1)/(lsegcsx1-lsegcex1);
@@ -480,23 +436,23 @@ public class Segcvoro extends java.applet.Applet {
           dii=-1.0/gslope[i];
           ysi=ly-dii*lx;
           intersectionxi=(ysi-gintercept[i])/(gslope[i]-dii);
-          if(intersectionxi<gxs[i] || intersectionxi>gxe[i]){
+          if(intersectionxi<gs[i].x || intersectionxi>ge[i].x){
             cnt++;
-          }//intersectionxi<gxs[i] or intersectionxi>gxe[i]
+          }//intersectionxi<gs[i].x or intersectionxi>ge[i].x
           double dij;
           double ysj;
           double intersectionxj;
           dij=-1.0/gslope[j];
           ysj=ly-dij*lx;
           intersectionxj=(ysj-gintercept[j])/(gslope[j]-dij);
-          if(intersectionxj<gxs[j] || intersectionxj>gxe[j]){
+          if(intersectionxj<gs[j].x || intersectionxj>ge[j].x){
             cnt++;
           }
           if(cnt==0){
             double disijc;
             disijc=Math.abs(gslope[i]*lx-ly+gintercept[i])/pow(pow(gslope[i],2.0)+1.0,0.5);
             if(cntorder(i,j,lx,ly,disijc)==0){
-              g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
+              turtle.plot((int)(lx),(int)(ly));
             }
           }
         }//lx
@@ -541,23 +497,23 @@ public class Segcvoro extends java.applet.Applet {
           dii=-1.0/gslope[i];
           ysi=ly-dii*lx;
           intersectionxi=(ysi-gintercept[i])/(gslope[i]-dii);
-          if(intersectionxi<gxs[i] || intersectionxi>gxe[i]){
+          if(intersectionxi<gs[i].x || intersectionxi>ge[i].x){
             cnt++;
-          }//intersectionxi<gxs[i] or intersectionxi>gxe[i]
+          }//intersectionxi<gs[i].x or intersectionxi>ge[i].x
           double dij;
           double ysj;
           double intersectionxj;
           dij=-1.0/gslope[j];
           ysj=ly-dij*lx;
           intersectionxj=(ysj-gintercept[j])/(gslope[j]-dij);
-          if(intersectionxj<gxs[j] || intersectionxj>gxe[j]){
+          if(intersectionxj<gs[j].x || intersectionxj>ge[j].x){
             cnt++;
           }
           if(cnt==0){
             double disijc;
             disijc=Math.abs(gslope[i]*lx-ly+gintercept[i])/pow(pow(gslope[i],2.0)+1.0,0.5);
             if(cntorder(i,j,lx,ly,disijc)==0){
-              g.drawLine((int)(lx),(int)(ly),(int)(lx),(int)(ly));
+              turtle.plot((int)(lx),(int)(ly));
             }
           }
         }//lx
@@ -565,11 +521,12 @@ public class Segcvoro extends java.applet.Applet {
       }//j
     }//i
 
-    for(i=0;i<N-1;i++){
-      for(j=i+1;j<N;j++){
+    for(int i=0;i<N-1;i++){
+      for(int j=i+1;j<N;j++){
 
         //bisector of segment and a point
         //bisector is parabola arc.
+        turtle.begin(i, j, 7);
         double lpboriginx;
         double lpboriginy;
         double x;
@@ -589,15 +546,15 @@ public class Segcvoro extends java.applet.Applet {
         bisecsegpois(i,j);
         lpbijsp=gpbijsp;
         lpbijstheta=pi-gpbijstheta;
-        if(gxs[j]>gpboriginx){
+        if(gs[j].x>gpboriginx){
           lpbijstheta=pi2-gpbijstheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
         double yisrm;
         double yierm;
-        yisrm=Math.sin(lpbijstheta)*(gxs[i]-lpboriginx)+Math.cos(lpbijstheta)*(gys[i]-lpboriginy);
-        yierm=Math.sin(lpbijstheta)*(gxe[i]-lpboriginx)+Math.cos(lpbijstheta)*(gye[i]-lpboriginy);
+        yisrm=Math.sin(lpbijstheta)*(gs[i].x-lpboriginx)+Math.cos(lpbijstheta)*(gs[i].y-lpboriginy);
+        yierm=Math.sin(lpbijstheta)*(ge[i].x-lpboriginx)+Math.cos(lpbijstheta)*(ge[i].y-lpboriginy);
         ystart=yisrm;
         yend=yierm;
         if(yisrm>yierm){
@@ -606,19 +563,19 @@ public class Segcvoro extends java.applet.Applet {
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
-        g.setColor(Color.green);
+        turtle.setColor(4);
         for(y=ystart;y<yend;y=y+0.1){
           x=pow(y,2.0)/(4.0*lpbijsp);
           xrmp=lpboriginx+Math.cos(-lpbijstheta)*x-Math.sin(-lpbijstheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbijstheta)*x+Math.cos(-lpbijstheta)*y;
           cnt=0;
-          disjs=dis(xrmp,yrmp,gxs[j],gys[j]);
-          disje=dis(xrmp,yrmp,gxe[j],gye[j]);
+          disjs=dis(xrmp,yrmp,gs[j].x,gs[j].y);
+          disje=dis(xrmp,yrmp,ge[j].x,ge[j].y);
           if(disje<disjs){
             cnt++;
           }else{
             double disjseps;
-            disjseps=dis(xrmp,yrmp,gxs[j]*0.999+gxe[j]*0.001,gys[j]*0.999+gye[j]*0.001);
+            disjseps=dis(xrmp,yrmp,gs[j].x*0.999+ge[j].x*0.001,gs[j].y*0.999+ge[j].y*0.001);
             if(disjseps<disjs){
               cnt++;
             }
@@ -627,7 +584,7 @@ public class Segcvoro extends java.applet.Applet {
           lpboriginy=gpboriginy;
           if(cnt==0){
             if(cntorder(i,j,xrmp,yrmp,disjs)==0){
-              g.drawLine((int)(xrmp),(int)(yrmp),(int)(xrmp),(int)(yrmp));
+              turtle.plot((int)(xrmp),(int)(yrmp));
             }
           }//cnt==0
         }//y
@@ -635,16 +592,17 @@ public class Segcvoro extends java.applet.Applet {
         double lpbijep;
         double lpbijetheta;
         //parabola bisector of line segment i and right point of segment j
+        turtle.begin(i, j, 8);
         bisecsegpoie(i,j);
         lpbijep=gpbijep;
         lpbijetheta=pi-gpbijetheta;
-        if(gxe[j]>gpboriginx){
+        if(ge[j].x>gpboriginx){
           lpbijetheta=pi2-gpbijetheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
-        yisrm=Math.sin(lpbijetheta)*(gxs[i]-lpboriginx)+Math.cos(lpbijetheta)*(gys[i]-lpboriginy);
-        yierm=Math.sin(lpbijetheta)*(gxe[i]-lpboriginx)+Math.cos(lpbijetheta)*(gye[i]-lpboriginy);
+        yisrm=Math.sin(lpbijetheta)*(gs[i].x-lpboriginx)+Math.cos(lpbijetheta)*(gs[i].y-lpboriginy);
+        yierm=Math.sin(lpbijetheta)*(ge[i].x-lpboriginx)+Math.cos(lpbijetheta)*(ge[i].y-lpboriginy);
         ystart=yisrm;
         yend=yierm;
         if(yisrm>yierm){
@@ -653,26 +611,26 @@ public class Segcvoro extends java.applet.Applet {
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
-        g.setColor(Color.pink);
+        turtle.setColor(5);
         for(y=ystart;y<yend;y=y+0.1){
           x=pow(y,2.0)/(4.0*lpbijep);
           xrmp=lpboriginx+Math.cos(-lpbijetheta)*x-Math.sin(-lpbijetheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbijetheta)*x+Math.cos(-lpbijetheta)*y;
           cnt=0;
-          disjs=dis(xrmp,yrmp,gxe[j],gye[j]);
-          disje=dis(xrmp,yrmp,gxs[j],gys[j]);
+          disjs=dis(xrmp,yrmp,ge[j].x,ge[j].y);
+          disje=dis(xrmp,yrmp,gs[j].x,gs[j].y);
           if(disje<disjs){
             cnt++;
           }else{
             double disjeeps;
-            disjeeps=dis(xrmp,yrmp,gxe[j]*0.999+gxs[j]*0.001,gye[j]*0.999+gys[j]*0.001);
+            disjeeps=dis(xrmp,yrmp,ge[j].x*0.999+gs[j].x*0.001,ge[j].y*0.999+gs[j].y*0.001);
             if(disjeeps<disjs){
               cnt++;
             }
           }
           if(cnt==0){
             if(cntorder(i,j,xrmp,yrmp,disjs)==0){
-              g.drawLine((int)(xrmp),(int)(yrmp),(int)(xrmp),(int)(yrmp));
+              turtle.plot((int)(xrmp),(int)(yrmp));
             }
           }//cnt==0
         }//y
@@ -680,18 +638,19 @@ public class Segcvoro extends java.applet.Applet {
         double lpbjisp;
         double lpbjistheta;
         //parabola bisector of line segment j and left point of segment i
+        turtle.begin(i, j, 9);
         bisecsegpois(j,i);
         lpbjisp=gpbijsp;
         lpbjistheta=pi-gpbijstheta;
-        if(gxs[i]>gpboriginx){
+        if(gs[i].x>gpboriginx){
           lpbjistheta=pi2-gpbijstheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
         double yjsrm;
         double yjerm;
-        yjsrm=Math.sin(lpbjistheta)*(gxs[j]-lpboriginx)+Math.cos(lpbjistheta)*(gys[j]-lpboriginy);
-        yjerm=Math.sin(lpbjistheta)*(gxe[j]-lpboriginx)+Math.cos(lpbjistheta)*(gye[j]-lpboriginy);
+        yjsrm=Math.sin(lpbjistheta)*(gs[j].x-lpboriginx)+Math.cos(lpbjistheta)*(gs[j].y-lpboriginy);
+        yjerm=Math.sin(lpbjistheta)*(ge[j].x-lpboriginx)+Math.cos(lpbjistheta)*(ge[j].y-lpboriginy);
         ystart=yjsrm;
         yend=yjerm;
         if(yjsrm>yjerm){
@@ -700,26 +659,26 @@ public class Segcvoro extends java.applet.Applet {
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
-        g.setColor(Color.cyan);
+        turtle.setColor(7);
         for(y=ystart;y<yend;y=y+0.1){
           x=pow(y,2.0)/(4.0*lpbjisp);
           xrmp=lpboriginx+Math.cos(-lpbjistheta)*x-Math.sin(-lpbjistheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbjistheta)*x+Math.cos(-lpbjistheta)*y;
           cnt=0;
-          disjs=dis(xrmp,yrmp,gxs[i],gys[i]);
-          disje=dis(xrmp,yrmp,gxe[i],gye[i]);
+          disjs=dis(xrmp,yrmp,gs[i].x,gs[i].y);
+          disje=dis(xrmp,yrmp,ge[i].x,ge[i].y);
           if(disje<disjs){
             cnt++;
           }else{
             double disiseps;
-            disiseps=dis(xrmp,yrmp,gxs[i]*0.999+gxe[i]*0.001,gys[i]*0.999+gye[i]*0.001);
+            disiseps=dis(xrmp,yrmp,gs[i].x*0.999+ge[i].x*0.001,gs[i].y*0.999+ge[i].y*0.001);
             if(disiseps<disjs){
               cnt++;
             }
           }
           if(cnt==0){
             if(cntorder(i,j,xrmp,yrmp,disjs)==0){
-              g.drawLine((int)(xrmp),(int)(yrmp),(int)(xrmp),(int)(yrmp));
+              turtle.plot((int)(xrmp),(int)(yrmp));
             }
           }
         }//y
@@ -727,16 +686,17 @@ public class Segcvoro extends java.applet.Applet {
         double lpbjiep;
         double lpbjietheta;
         //parabola bisector of line segment j and right point of segment i
+        turtle.begin(i, j, 10);
         bisecsegpoie(j,i);
         lpbjiep=gpbijep;
         lpbjietheta=pi-gpbijetheta;
-        if(gxe[i]>gpboriginx){
+        if(ge[i].x>gpboriginx){
           lpbjietheta=pi2-gpbijetheta;
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
-        yjsrm=Math.sin(lpbjietheta)*(gxs[j]-lpboriginx)+Math.cos(lpbjietheta)*(gys[j]-lpboriginy);
-        yjerm=Math.sin(lpbjietheta)*(gxe[j]-lpboriginx)+Math.cos(lpbjietheta)*(gye[j]-lpboriginy);
+        yjsrm=Math.sin(lpbjietheta)*(gs[j].x-lpboriginx)+Math.cos(lpbjietheta)*(gs[j].y-lpboriginy);
+        yjerm=Math.sin(lpbjietheta)*(ge[j].x-lpboriginx)+Math.cos(lpbjietheta)*(ge[j].y-lpboriginy);
         ystart=yjsrm;
         yend=yjerm;
         if(yjsrm>yjerm){
@@ -745,26 +705,26 @@ public class Segcvoro extends java.applet.Applet {
         }
         lpboriginx=gpboriginx;
         lpboriginy=gpboriginy;
-        g.setColor(Color.red);
+        turtle.setColor(8);
         for(y=ystart;y<yend;y=y+0.1){
           x=pow(y,2.0)/(4.0*lpbjiep);
           xrmp=lpboriginx+Math.cos(-lpbjietheta)*x-Math.sin(-lpbjietheta)*y;
           yrmp=lpboriginy+Math.sin(-lpbjietheta)*x+Math.cos(-lpbjietheta)*y;
           cnt=0;
-          disjs=dis(xrmp,yrmp,gxe[i],gye[i]);
-          disje=dis(xrmp,yrmp,gxs[i],gys[i]);
+          disjs=dis(xrmp,yrmp,ge[i].x,ge[i].y);
+          disje=dis(xrmp,yrmp,gs[i].x,gs[i].y);
           if(disje<disjs){
             cnt++;
           }else{
             double disieeps;
-            disieeps=dis(xrmp,yrmp,gxe[i]*0.999+gxs[i]*0.001,gye[i]*0.999+gys[i]*0.001);
+            disieeps=dis(xrmp,yrmp,ge[i].x*0.999+gs[i].x*0.001,ge[i].y*0.999+gs[i].y*0.001);
             if(disieeps<disjs){
               cnt++;
             }
           }
           if(cnt==0){
             if(cntorder(i,j,xrmp,yrmp,disjs)==0){
-              g.drawLine((int)(xrmp),(int)(yrmp),(int)(xrmp),(int)(yrmp));
+              turtle.plot((int)(xrmp),(int)(yrmp));
             }
           }//cnt==0
         }//y
@@ -902,14 +862,14 @@ public class Segcvoro extends java.applet.Applet {
     double lcy;
 
     //distance between line i and point(left point of j)
-    dis=Math.abs(gslope[pari]*gxs[parj]-gys[parj]+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
+    dis=Math.abs(gslope[pari]*gs[parj].x-gs[parj].y+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
     lp=dis/2.0;
     lslopej=-1.0/gslope[pari];
-    linterceptj=gys[parj]-lslopej*gxs[parj];
+    linterceptj=gs[parj].y-lslopej*gs[parj].x;
     lintersectionx=(gintercept[pari]-linterceptj)/(lslopej-gslope[pari]);
     lintersectiony=lintersectionx*lslopej+linterceptj;
-    lcx=(gxs[parj]+lintersectionx)/2.0;
-    lcy=(gys[parj]+lintersectiony)/2.0;
+    lcx=(gs[parj].x+lintersectionx)/2.0;
+    lcy=(gs[parj].y+lintersectiony)/2.0;
     lthetaj=Math.atan(lslopej);
 
     gpboriginx=lcx;
@@ -923,14 +883,14 @@ public class Segcvoro extends java.applet.Applet {
   void bisecsegpoie(int pari, int parj){
 
     //distance between line i and point(right point of j)
-    double dis=Math.abs(gslope[pari]*gxe[parj]-gye[parj]+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
+    double dis=Math.abs(gslope[pari]*ge[parj].x-ge[parj].y+gintercept[pari])/pow(pow(gslope[pari],2.0)+1.0,0.5);
     double lp=dis/2.0;
     double lslopej=-1.0/gslope[pari];
-    double linterceptj=gye[parj]-lslopej*gxe[parj];
+    double linterceptj=ge[parj].y-lslopej*ge[parj].x;
     double lintersectionx=(gintercept[pari]-linterceptj)/(lslopej-gslope[pari]);
     double lintersectiony=lintersectionx*lslopej+linterceptj;
-    double lcx=(gxe[parj]+lintersectionx)/2.0;
-    double lcy=(gye[parj]+lintersectiony)/2.0;
+    double lcx=(ge[parj].x+lintersectionx)/2.0;
+    double lcy=(ge[parj].y+lintersectiony)/2.0;
     double lthetaj=Math.atan(lslopej);
 
     gpboriginx=lcx;
@@ -955,13 +915,13 @@ public class Segcvoro extends java.applet.Applet {
           dil=-1.0/gslope[l];
           ysl=sy-dil*sx;
           intersectionxl=(ysl-gintercept[l])/(gslope[l]-dil);
-          if(intersectionxl<gxs[l] || intersectionxl>gxe[l]){
-            double disls=dis(sx,sy,gxs[l],gys[l]);
+          if(intersectionxl<gs[l].x || intersectionxl>ge[l].x){
+            double disls=dis(sx,sy,gs[l].x,gs[l].y);
             if(disls<sd){
               lcnt++;
             }else{
               double disle;
-              disle=dis(sx,sy,gxe[l],gye[l]);
+              disle=dis(sx,sy,ge[l].x,ge[l].y);
               if(disle<sd){
                 lcnt++;
               }
