@@ -16,8 +16,6 @@ import java.awt.geom.Point2D;
  */
 public class Segcvoro {
   
-  static final long serialVersionUID = 422334534346323214L;
-
   final static double pi = Math.PI;
   final static double pi2 = Math.PI*2d;
   
@@ -53,11 +51,10 @@ public class Segcvoro {
   double gpbijep;
   double gpbijetheta;
 
-  Segcvoro(double width, double height, int n, Point2D.Double gStart[], Point2D.Double gEnd[]) {
-    N=n;
-    
+  Segcvoro(double width, double height, Point2D.Double gStart[], Point2D.Double gEnd[]) {
+      
     assert(gStart.length == gEnd.length);
-    assert(gStart.length <= n);
+    N = gStart.length;
     
     gs = gStart;
     ge = gEnd;
@@ -130,18 +127,6 @@ public class Segcvoro {
     double esly;
     double esrx;
     double esry;
-
-    turtle.setColor(1);
-    turtle.fillRect(1,1,widthI,heightI);
-    turtle.setColor(3);
-    turtle.drawString("N="+N,15,15);
-    
-    for(int k=0; k<N; k++){
-      turtle.setColor( 3);
-      turtle.drawLine((int)gs[k].x,(int)gs[k].y,(int)ge[k].x,(int)ge[k].y);
-      turtle.setColor( 2);
-      turtle.drawString(""+k,(int)(gs[k].x+ge[k].x)/2,(int)(gs[k].y+ge[k].y)/2);
-    }//for k<n
     
     for(int i=0;i<N-1;i++){
       for(int j=i+1;j<N;j++){
