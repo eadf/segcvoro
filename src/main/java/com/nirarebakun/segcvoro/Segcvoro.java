@@ -73,7 +73,7 @@ public class Segcvoro {
     Point2D.Double tmpw;
     
     for(int k=0; k<N; k++){
-      dslope=(ge[k].y-gs[k].y)/(ge[k].x-gs[k].x);
+      dslope=(ge[k].y-gs[k].y)/(ge[k].x-gs[k].x);  // dslope == NaN for vertical lines?
       dintercept=gs[k].y-dslope*gs[k].x;
 
       if(gs[k].x>ge[k].x){

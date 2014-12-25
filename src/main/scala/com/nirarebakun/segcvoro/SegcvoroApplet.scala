@@ -47,15 +47,14 @@ class SegcvoroApplet extends java.applet.Applet with TurtleLogger {
   }
   
   def getSegments(width:Int, height:Int) = {
-
-    val oSegments = Array( (0,0), (1,0), (1,1), (0,1), (0,0)).map(p=>new Point2D.Double(p._1*0.8*width+0.1*width, p._2*0.8*height + 0.1*height))
-    val iSegments = Array( (0,0), (1,0), (1,1), (0,1), (0,0)).map(p=>new Point2D.Double(p._1*0.1*width+0.5*width, p._2*0.1*height + 0.5*height))
+    val template = Array( (0.0001d,0.0001d), (1d,0d), (0.9999d,0.9999d), (0d,1d), (0d,0d))
+    val oSegments = template.map(p=>new Point2D.Double(p._1*0.8*width+0.1*width, p._2*0.8*height + 0.1*height))
+    val iSegments = template.map(p=>new Point2D.Double(p._1*0.1*width+0.5*width, p._2*0.1*height + 0.5*height))
 
     val n = oSegments.size + iSegments.size
     val gs = new Array[Point2D.Double](n-2)
     val ge = new Array[Point2D.Double](n-2)
     
-    //def f(p:Double) = Math.random*(p-30)+15
     var p = 0
     var i = 0
     for(j <- 1 until oSegments.size) {
