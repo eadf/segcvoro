@@ -5,6 +5,8 @@ An experimental clone of segmented voronoi code found at Takashi Ohyama's websit
 
 My intentions is to experiment with the code a bit and see if it can be re-packaged into an usable library.
 
+It does not look too good, when the segments are exacly vertical the voronoi code fails. :/
+
 Original license :
 
     Use of Takashi OHYAMA's website (Open 2012/9/16, 0th revision Sunday, 16-Sep-2012 14:57:22 JST)
